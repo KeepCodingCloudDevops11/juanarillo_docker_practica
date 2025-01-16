@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   web:
-    image: juanarillo/docker_practica:flask
+    image: juanarillo/docker_practica:flask_v2
     ports:
       - "8080:5000"
     env_file:
@@ -29,5 +29,29 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
 volumes:
   redis_data:
+  es_data:

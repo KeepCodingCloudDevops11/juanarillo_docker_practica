@@ -1,4 +1,4 @@
 flask
 redis
 python-dotenv
-python-json-logger==3.2.1
+elasticsearch==8.10.0
