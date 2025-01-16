@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  web:
+    image: juanarillo/docker_practica:flask
+    ports:
+      - "8080:5000"
+    env_file:
+      - ${ENV_FILE:-.env.dev}
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    depends_on:
+      - redis
+  redis:
+    image: "redis:alpine"
+    hostname: ${REDIS_HOST:-redis}
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+volumes:
+  redis_data:
