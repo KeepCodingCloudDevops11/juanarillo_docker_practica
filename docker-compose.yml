@@ -23,6 +23,11 @@ services:
       - REDIS_PORT=${REDIS_PORT}
     volumes:
       - redis_data:/data
-    command: ["redis-server", "--appendonly", "yes"]
+    command: ["redis-server","--loglevel", "warning", "--logfile", ""]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 volumes:
   redis_data:
