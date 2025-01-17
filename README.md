@@ -48,7 +48,7 @@ También podremos ver los logs almacenados en el servicio *ElasticSearch*. Se ha
 
 ![elastic](images/elastic.png)
 
-Por último se ha creado un servicio *Kibana* en el que podemos monitorizar, de una manera más dinámica, nuestros registros de logs.
+Por último se ha creado un servicio *Kibana* en el que podemos monitorizar, de una manera más dinámica, nuestros registros de logs. Se podrá acceder a través de la url [`http://localhost:5601`](http://localhost:5601)
 
 ![kibana](images/kibana.png)
 ## PUESTA EN MARCHA
