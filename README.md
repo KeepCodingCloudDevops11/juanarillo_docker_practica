@@ -1,12 +1,15 @@
 # PRÁCTICA CONTENEDORES: MÁS QUE VMS DOCKER - JUAN ARILLO
+
 Práctica de Juan Arillo para el módulo de **Contenedores: Más que VMs Docker** a la nube.
 
 ## TABLA DE CONTENIDOS
+
 [Descripción](#descripción)  
 [Funcionamiento](#funcionamiento)  
 [Puesta en marcha](#puesta-en-marcha)
 
 ## DESCRIPCIÓN
+
 Este proyecto despliega una aplicación *Flask* que trabaja sobre una base de datos *Redis*.  
 
 La aplicación *Flask* muestra un texto con los datos del *Host* y del *Puerto* donde se despliega el servicio de la
@@ -23,6 +26,7 @@ Por último, también se despliega un servicio *Kibana* para trabajar con la inf
 servicio *ElasticSearch*.
 
 ## FUNCIONAMIENTO
+
 Se ha creado una imagen de la aplicación *Flask* (cuyo `Dockerfile` se puede ver en el repositorio), que se ha subido a un repositorio *docker hub*. Esta imagen se usa posteriormente en el fichero `docker-compose.yml` para el despliegue de la aplicación. Esta imagen, junto con la información del `Dockerfile` empleado, se puede ver en esta dirección: https://hub.docker.com/repository/docker/juanarillo/docker_practica/general .  
 
 El despliegue de los servicios se realiza a traves de *docker compose* usando el fichero `docker-compose.yml`, donde se ha configurado el despliegue de los siguientes servicios:  
@@ -51,4 +55,55 @@ También podremos ver los logs almacenados en el servicio *ElasticSearch*. Se ha
 Por último se ha creado un servicio *Kibana* en el que podemos monitorizar, de una manera más dinámica, nuestros registros de logs. Se podrá acceder a través de la url [`http://localhost:5601`](http://localhost:5601)
 
 ![kibana](images/kibana.png)
+
 ## PUESTA EN MARCHA
+
+1- Requisitos previos -> Tener instalado **git** y **docker** en el ordenador.  
+2- Descarga del repositorio -> Abrir un terminal en el ordenador y clonar el repositorio.  
+
+```bash
+git clone git@github.com:KeepCodingCloudDevops11/juanarillo_docker_practica.git
+```
+
+3- Acceder a la carpeta con el proyecto.
+
+```bash
+cd juanarillo_docker_practica
+```
+
+4- Copiar en esta carpeta los ficheros `.env.dev` y `.env.prod` que se le han debido proporcionar.  
+5- Desplegar la aplicación y los servicios usando las variables de entorno que se deseen mediante *docker compose*:
+
+```bash
+ENV_FILE=.env.dev docker-compose --env-file .env.dev  up --build # Para desplegar con las variables del fichero .env.dev
+ENV_FILE=.env.prod docker-compose --env-file .env.prod  up --build # Para desplegar con las variables del fichero .env.prod
+
+# ENV_FILE pasa los parámetros a la aplicación Flask
+# --env-file pasa los parámetros al fichero docker-compose.yml
+```
+
+6- Comprobar que los servicios se han levantado y funciona correctamente:  
+    - Se puede acceder a [`http://localhost:8080`](http://localhost:8080) .  
+    - El texto de esta página muestra correctamente el *host* y el *port* establecido en las variables del fichero `.env` .  
+    - El puerto en el que se ha desplegado el servicio *Redis* corresponde al establecido en el fichero `.env` desplegado. Se puede ver en la aplicación *Github desktop* o mediante el listado en consola de los contenedores activos usando el terminal `docker ps` . ![ports](images/ports.png)  
+    - También podrá verse en la terminal o en la pestaña de *Logs* de la aplicación *Flask* (**web** en este caso) en *Github Desktop*, los logs de haber accedido a la aplicación y haberse almacenado los datos en el servicio **Elastic Search**.  ![logs](images/logs.png) ![logs](images/logsdesktop.png)  
+    - Podemos comprobar que los logs han sido realmente guardados en el servicio *ElasticSearch*, accediendo a la ruta [`http://localhost:8080/logs`](http://localhost:8080/logs), que se ha definido en la aplicación.  
+    - Comprobar que el servicio *Kibana* está funcionando, mediante el acceso a [`http://localhost:5601`](http://localhost:5601).
+
+7- Parar los servicios -> Hay dos posibilidades.  
+    - Si se ha dejado corriendo en la terminal, pulsando la combinación `CTRL+C` para los contenedores.  
+    - A través del terminal usando el comando `stop` de *Docker*.
+
+```bash
+# Hay que situarse en la carpeta desde la que se ha lanzado el docker compose, ya que tendremos que indicar el fichero .env con el que se lanzó inicialmente.
+
+docker compose --env-file .env.prod stop
+```
+
+8- Eliminar los contenedores -> En la terminal, habrá que lanzar el comando de apagado, **pero indicando el fichero `.env` empleado**, porque si no, no reconoce que contenedores son los que hay que eliminar.
+
+```bash
+# Hay que situarse en la carpeta desde la que se ha lanzado el docker compose, ya que tendremos que indicar el fichero .env con el que se lanzó inicialmente.
+
+docker-compose --env-file .env.prod down
+```
