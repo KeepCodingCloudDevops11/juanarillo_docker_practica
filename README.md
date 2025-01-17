@@ -27,10 +27,10 @@ Se ha creado una imagen de la aplicación *Flask* (cuyo `Dockerfile` se puede ve
 
 El despliegue de los servicios se realiza a traves de *docker compose* usando el fichero `docker-compose.yml`, donde se ha configurado el despliegue de los siguientes servicios:  
 
-- web: Aplicación Flask cuyo código se encuentra en el fichero `app.py`. Se usa la imagen personalizada que ha sido subida a [*Docker hub*](https://hub.docker.com/repository/docker/juanarillo/docker_practica/general). Se expone en el puerto `8080` y está configurado para admitir modificaciones en caliente del código, sin tener que desplegar de nuevo.
-- redis: Servicio de persistencia del número de veces que se visita la página principal de la aplicación. Está configurado para recibir por parámetros el *HOST* y el *PORT*. Se le han activado los logs a nivel STDOUT / STDERR y se ha establecido un volumen para guardar los datos cuando se paren los servicios.
-- elasticsearch: Servicio para almacenar los logs que se generan en la aplicación. También se ha creado un volumen para su persistencia aunque se paren los servicios.
-- kibana: Servicio para la monitorización de los logs almacenados en el servicio *ElasticSearch*.
+- **web**: Aplicación Flask cuyo código se encuentra en el fichero `app.py`. Se usa la imagen personalizada que ha sido subida a [*Docker hub*](https://hub.docker.com/repository/docker/juanarillo/docker_practica/general). Se expone en el puerto `8080` y está configurado para admitir modificaciones en caliente del código, sin tener que desplegar de nuevo.
+- **redis**: Servicio de persistencia del número de veces que se visita la página principal de la aplicación. Está configurado para recibir por parámetros el *HOST* y el *PORT*. Se le han activado los logs a nivel STDOUT / STDERR y se ha establecido un volumen para guardar los datos cuando se paren los servicios.
+- **elasticsearch**: Servicio para almacenar los logs que se generan en la aplicación. También se ha creado un volumen para su persistencia aunque se paren los servicios.
+- **kibana**: Servicio para la monitorización de los logs almacenados en el servicio *ElasticSearch*.
 
 Una vez desplegado los servicios, se podrá acceder a la url [`http://localhost:8080`](http://localhost:8080) donde se mostrará el texto con el host y el puerto del servicio *Redis* según el fichero `.env` empleado, y el número de visitas.  
 
